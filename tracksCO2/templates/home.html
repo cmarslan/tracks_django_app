@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+    </style>
+    {% if user.is_authenticated %}
+        <div class="alert alert-primary" role="alert" style="text-align: center">
+            Welcome {{ user.username }}!
+        </div>
+
+        <div class="center">
+            <button type="button" class="btn btn-outline-secondary"><a href="{% url 'logout' %}">Log Out</a></button>
+        </div>
+    {% else %}
+        <div class="alert alert-danger" role="alert" style="text-align: center">
+            You are not <a href="{% url 'login' %}" class="alert-link">logged in.</a>
+        </div>
+        <div class="center">
+            <button type="button" class="btn btn-outline-secondary"><a href="{% url 'login' %}">Log In</a></button>
+        </div>
+    {% endif %}
+{% endblock %}

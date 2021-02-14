@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+{% if user.is_authenticated %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Emission List</title>
+        {% load static %}
+        <link rel="stylesheet" href="../static/css/style.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+    </head>
+
+    <body>
+    <p><a href="{% url 'logout' %}">Log Out</a></p>
+    <div>
+        <form method="post">
+
+            <h2 style="text-align: center">Filter Options</h2>
+            {% csrf_token %}
+            <div class="container,center" id="hideShow">
+                <div class="row">
+                    <div class="col-sm">
+                        <h5>Time Period Start</h5>
+                        <p>YYYY-MM-DD</p>
+                        {{ form.period_start }}
+                    </div>
+                    <div class="col-sm">
+                        <h5>Time Period End</h5>
+                        <p>YYYY-MM-DD</p>
+                        {{ form.period_end }}
+                    </div>
+                    <div class="col-sm">
+                        <h5>Start City</h5>
+                        {{ form.start_city }}
+                    </div>
+                    <div class="col-sm">
+                        <h5>Arrival City</h5>
+                        {{ form.end_city }}
+                    </div>
+                    <div class="col-sm">
+                        <h5>Type of Calculations</h5>
+                        {{ form.type_of_calculation }}
+                    </div>
+                    <div class="col-sm">
+                        <h5>Type of Goods</h5>
+                        {{ form.type_of_goods }}
+                    </div>
+                </div>
+                <br>
+            </div>
+            <div class="container">
+                <div class="row" style="text-align: center;">
+                    <div class="col" style="text-align: center">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                    <div class="col">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                Order of the Data
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="?sort_by=carrier_company_id">Carrier Name</a>
+                                <a class="dropdown-item" href="?sort_by=total_co2_emitted">CO2 Emission</a>
+                                <a class="dropdown-item" href="?sort_by=travelled_distance">Distance</a>
+                                <a class="dropdown-item" href="?sort_by=weight">Average weight of shipments</a>
+                                <a class="dropdown-item" href="?sort_by=start_city">Start City</a>
+                                <a class="dropdown-item" href="?sort_by=end_city">Arrival City</a>
+                                <a class="dropdown-item" href="?sort_by=type_of_goods">Type of Goods</a>
+                                <a class="dropdown-item" href="?sort_by=type_of_calculations">Type of Calculations</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <table id="products" class="center" style="text-align: center">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Carrier Name</th>
+                    <th>CO2 Emission</th>
+                    <th>Distance</th>
+                    <th>Average weight of shipments</th>
+                </tr>
+                </thead>
+                {% for category in all_data %}
+                    <tbody>
+                    <tr class="parent">
+                        <td><a href="#" type="button">Details</a></td>
+                        <td>{{ category.carrier_company_id }}</td>
+                        <td>{{ category.total_co2_emitted }}</td>
+                        <td>{{ category.travelled_distance }}</td>
+                        <td>{{ category.weight }}</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>Start City</th>
+                        <th>End City</th>
+                        <th>Type of Goods</th>
+                        <th>Type of Calculation</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>{{ category.start_city }}</td>
+                        <td>{{ category.end_city }}</td>
+                        <td>{{ category.type_of_goods }}</td>
+                        <td>{{ category.type_of_calculations }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </form>
+
+        <script src="../static/js/features.js"></script>
+    </div>
+    </body>
+{% else %}
+    <div class="alert alert-danger" role="alert" style="text-align: center">
+        You are not <a href="{% url 'login' %}" class="alert-link">logged in.</a>
+    </div>
+{% endif %}
+</html>
+
+
